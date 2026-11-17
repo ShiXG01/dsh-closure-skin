@@ -1,7 +1,6 @@
 {
   "name": "dsh-closure-skin",
   "version": "0.1.0",
-  "private": true,
   "description": "可露希尔配套皮肤：街机像素风格，罗德岛天才工程师特供工作站",
   "type": "module",
   "main": "lib/index.js",
@@ -9,9 +8,12 @@
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
-    "./icon": "./icon.png"
+    "./icon": "./icon.png",
+    "./package.json": "./package.json",
+    "./locale/*": "./locale/*"
   },
   "files": [
+    "locale",
     "lib",
     "icon.png",
     "cordis.patch.yml",

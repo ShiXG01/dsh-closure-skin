@@ -2746,8 +2746,8 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
       }
       return h('div', { className: 'clsk-page' },
         h('div', { className: 'clsk-head' },
-          h('div', { className: 'clsk-heading' }, '可露希尔皮肤'),
-          h('div', { className: 'clsk-sub' }, '字体与外观只作用于这套皮肤，设置保存在本机。')),
+          h('div', { className: 'clsk-heading' }, '可露希尔主题'),
+          h('div', { className: 'clsk-sub' }, '字体与外观只作用于这套主题，设置保存在本机。')),
         h('div', { className: 'clsk-card' },
           ClosureSettingRow('字体方案', '英文 Cascadia Mono；中文默认等线。', ClosureSelect({
             value: state.font,

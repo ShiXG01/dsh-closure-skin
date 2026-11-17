@@ -2617,27 +2617,6 @@ html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) [class*='panelList'] 
   color: #12305f !important;
 }
 
-/* 设置窗口左侧导航的选中项：用设置页自己的紫/品红方案。
-   放在通用导航规则之后并提高特异性，否则会被那条「会话蓝」规则盖掉。 */
-html[data-dsh-closure-skin] [data-shortcut-modal='settings'] nav [class*='navCell'][class*='active'],
-html[data-dsh-closure-skin] [data-shortcut-modal='settings'] nav [class*='navCell'][aria-current]:not([aria-current='false']) {
-  color: #f0dff8 !important;
-  border: 1px solid rgba(210, 90, 170, 0.42) !important;
-  border-radius: 0 !important;
-  background: linear-gradient(180deg, rgba(126, 14, 228, 0.28), rgba(30, 14, 45, 0.95)) !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(53, 224, 208, 0.1),
-    2px 2px 0 #05060f !important;
-}
-html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] nav [class*='navCell'][class*='active'],
-html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] nav [class*='navCell'][aria-current]:not([aria-current='false']) {
-  color: #5a1f63 !important;
-  border-color: rgba(176, 24, 106, 0.3) !important;
-  background: linear-gradient(180deg, #f3dcf0, #e3d2fa) !important;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.7),
-    2px 2px 0 rgba(80, 20, 60, 0.12) !important;
-}
 /* ———— 右栏（开始页）标签条：标签改成开始页卡片同款（方角 + 3px 顶条 + 扫描底） ———— */
 html[data-dsh-closure-skin] [data-sidebar-right-open] :is([role='tab'], [data-dockkit-tab]) {
   box-sizing: border-box;

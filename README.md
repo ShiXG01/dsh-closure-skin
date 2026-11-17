@@ -28,13 +28,27 @@ node tools/build-client.mjs
 
 ## 安装
 
-profile 的 `package.json` 增加：
+### 从仓库安装（推荐）
 
-```json
-"dsh-closure-skin": "link:E:/path/to/dsh-closure-skin"
+在 Plugins → Add plugin 里填仓库地址：
+
+```
+https://github.com/fengshiyangrouguan/dsh-closure-skin
 ```
 
-并把 `dsh-closure-skin` 加入 `dsh.profile.bundles`；或在 Plugins → Add plugin 里填本地目录。
+或手动在 profile 的 `package.json` 加依赖，并把插件名加进 `dsh.profile.bundles`：
+
+```json
+"dsh-closure-skin": "github:fengshiyangrouguan/dsh-closure-skin"
+```
+
+### 本地开发安装
+
+```json
+"dsh-closure-skin": "link:<本地路径>/dsh-closure-skin"
+```
+
+同样需要把 `dsh-closure-skin` 放进 `dsh.profile.bundles`。
 
 ## 字体
 

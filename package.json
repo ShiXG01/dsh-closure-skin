@@ -15,8 +15,19 @@
     "lib",
     "icon.png",
     "cordis.patch.yml",
+    "LICENSE",
     "LICENSE-FONT",
-    "FONT-NOTICE.md"
+    "FONT-NOTICE.md",
+    "README.md"
+  ],
+  "keywords": [
+    "dsh-plugin",
+    "dsh-skin",
+    "client-theme",
+    "pixel-art",
+    "crt",
+    "arknights",
+    "closure"
   ],
   "dsh": {
     "bundle": {
@@ -24,8 +35,23 @@
     },
     "client": {
       "platform": "web",
-      "inject": ["@deepseek-ai/dsh-client-ui-layout", "@deepseek-ai/dsh-client-ui-settings"]
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ]
     }
   },
-  "license": "MIT"
+  "engines": {
+    "dsh": ">=0.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fengshiyangrouguan/dsh-closure-skin.git"
+  },
+  "homepage": "https://github.com/fengshiyangrouguan/dsh-closure-skin#readme",
+  "bugs": {
+    "url": "https://github.com/fengshiyangrouguan/dsh-closure-skin/issues"
+  },
+  "license": "MIT",
+  "author": "FSYRG"
 }

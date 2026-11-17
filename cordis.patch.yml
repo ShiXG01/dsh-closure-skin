@@ -1,0 +1,4 @@
+# dsh-closure-skin — Cordis bundle patch
+- insert:
+    - id: dsh-closure-skin
+      name: dsh-closure-skin

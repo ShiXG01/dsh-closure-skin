@@ -51,6 +51,22 @@ function findIn(dir, name) {
 }
 
 let src = fs.readFileSync(TEMPLATE, 'utf8')
+
+// 产物里压缩 CSS 模板：去掉注释与行首尾空白/空行（模板本身保持可读）。
+// 只动 CSS 字符串，不碰 JS。
+{
+  const marker = 'const CSS = `'
+  const from = src.indexOf(marker)
+  if (from >= 0) {
+    const start = from + marker.length
+    const end = src.indexOf('`', start)
+    let css = src.slice(start, end)
+    css = css.replace(/\/\*[\s\S]*?\*\//g, '')
+    css = css.split('\n').map((line) => line.trim()).filter(Boolean).join('\n')
+    src = src.slice(0, start) + css + src.slice(end)
+  }
+}
+
 const report = []
 for (const [token, file] of Object.entries(ASSETS)) {
   const full = findIn(SRC, file) || findIn(RAW, file)

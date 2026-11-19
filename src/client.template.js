@@ -305,33 +305,24 @@ html[data-windows-titlebar][data-dsh-closure-skin] [class*='centerCol'] {
 }
 
 /* ———— 极轻的扫描线 + 暗角（不拦点击，低于宿主菜单 100） ———— */
+/* 扫描线 + 暗角合并成一层，少一个全屏合成层；扫描线颜色已按原 opacity .4 折算 */
 html[data-dsh-closure-skin]::after {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 0 1px, rgba(0, 0, 0, 0.022) 1px 3px);
-  opacity: 0.4;
+  background:
+    radial-gradient(130% 110% at 50% 0%, transparent 62%, rgba(8, 8, 16, 0.26) 100%),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.011) 0 1px, rgba(0, 0, 0, 0.009) 1px 3px);
 }
-html[data-dsh-closure-skin][data-cl-scanlines='off']::after,
-html[data-dsh-closure-skin][data-cl-scanlines='off']::before {
+html[data-dsh-closure-skin]:has(body:not([data-ds-dark-theme]))::after {
+  background:
+    radial-gradient(130% 110% at 50% 0%, transparent 68%, rgba(43, 48, 184, 0.1) 100%),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.011) 0 1px, rgba(0, 0, 0, 0.009) 1px 3px);
+}
+html[data-dsh-closure-skin][data-cl-scanlines='off']::after {
   display: none;
-}
-html[data-dsh-closure-skin]::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: radial-gradient(130% 110% at 50% 0%, transparent 62%, rgba(8, 8, 16, 0.26) 100%);
-  transition: box-shadow 0.6s ease;
-}
-html[data-dsh-closure-skin]:has(body[data-ds-dark-theme])::before {
-  background: radial-gradient(130% 110% at 50% 0%, transparent 62%, rgba(8, 8, 16, 0.26) 100%);
-}
-html[data-dsh-closure-skin]:has(body:not([data-ds-dark-theme]))::before {
-  background: radial-gradient(130% 110% at 50% 0%, transparent 68%, rgba(43, 48, 184, 0.1) 100%);
 }
 
 /* ———— 情绪通道：只调整蓝紫色相与顶层光晕，不做多色霓虹 ———— */
@@ -578,7 +569,6 @@ html[data-dsh-closure-skin] svg[data-icon^='dsw-icon-loading'] {
   mask-repeat: no-repeat;
   mask-position: center;
   mask-size: contain;
-  filter: drop-shadow(0 0 3px var(--cl-spin-glow));
   image-rendering: pixelated;
   animation: cl-icon-spin 0.9s steps(8) infinite !important;
   transform-origin: 50% 50%;
@@ -1214,8 +1204,6 @@ html[data-dsh-closure-skin] hr {
   opacity: 0.9;
 }
 
-
-
 /* ———— 新会话首屏标题：先隐藏宿主文本，再用伪元素显示随机句 ———— */
 html[data-dsh-closure-skin] [class*='titleGroup'] > span:first-child {
   color: transparent !important;
@@ -1647,13 +1635,7 @@ html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] 
     inset -2px -2px 0 rgba(0, 0, 0, 0.6),
     2px 2px 0 rgba(0, 0, 0, 0.35) !important;
 }
-html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [role='switch'][aria-checked='true'] {
-  border-color: rgba(255, 150, 210, 0.65) !important;
-  background: linear-gradient(180deg, #ff9ad0, #9a4fff) !important;
-}
-html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [role='switch'] > * {
-  border-radius: 0 !important;
-}
+
 html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [role='switch'] > *:last-child:empty {
   border: 1px solid #1a0b2a !important;
   border-radius: 0 !important;
@@ -1667,13 +1649,7 @@ html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] 
 html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [role='switch']::after {
   border-radius: 0 !important;
 }
-html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [role='switch']:not(:has(> *)) {
-  width: 44px !important;
-  height: 24px !important;
-  min-width: 44px !important;
-  padding: 0 !important;
-  font-size: 0 !important;
-}
+
 html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [role='switch']:not(:has(> *))::after {
   content: '';
   position: absolute;
@@ -1689,10 +1665,7 @@ html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] 
     inset -1px -1px 0 #8b6fb0,
     1px 1px 0 rgba(0, 0, 0, 0.5);
 }
-html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [role='switch']:not(:has(> *))[aria-checked='true']::after {
-  left: auto;
-  right: 2px;
-}
+
 html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] button:not([aria-haspopup]):not([aria-pressed]):not([role='switch']):not(:has(svg)):not([class*='primary']):not([class*='brand']):not([class*='accent']):not([class*='recharge']):not([class*='danger']) {
   border: 1px solid rgba(200, 120, 190, 0.3) !important;
   border-radius: 0 !important;
@@ -1741,12 +1714,7 @@ html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] 
   box-shadow: none !important;
   color: inherit !important;
 }
-html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [class*='cardHead' i],
-html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [class*='search' i]:not(input):not(textarea) {
-  border-radius: 0 !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
+
 /* 标签 / 代码标识 / 徽章 */
 html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [class*='tag' i],
 html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [class*='badge' i],
@@ -1793,12 +1761,6 @@ html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal=
 }
 html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] [class*='options'] input::placeholder {
   color: #8d6fa8 !important;
-}
-html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] [class*='options'] [class*='tag'],
-html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] [class*='options'] [class*='badge'] {
-  border-color: rgba(11, 143, 154, 0.35) !important;
-  background: rgba(255, 255, 255, 0.7) !important;
-  color: #0b6f78 !important;
 }
 
 html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] [class*='options'] [class*='tag'],
@@ -2303,36 +2265,7 @@ html[data-dsh-closure-skin][data-dsh-closure-skin] body:not([data-ds-dark-theme]
   border-top-color: var(--cl-ctl-top-active) !important;
   color: var(--cl-ctl-text-active) !important;
 }
-html[data-dsh-closure-skin][data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] button[class*='themeCube' i][aria-pressed='true']:not([class*='__cl_never_1']):not([class*='__cl_never_2']):not([class*='__cl_never_3']):not([class*='__cl_never_4']):not([class*='__cl_never_5']):not([class*='__cl_never_6']):not([class*='__cl_never_7']):not([class*='__cl_never_8']):not([class*='__cl_never_9']):not([class*='__cl_never_10']) {
-  background: var(--cl-ctl-bg-active) !important;
-  border-color: var(--cl-ctl-border-active) !important;
-  border-top-color: var(--cl-ctl-top-active) !important;
-  color: var(--cl-ctl-text-active) !important;
-}
-html[data-dsh-closure-skin][data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] button[aria-haspopup]:hover:not([class*='__cl_never_1']):not([class*='__cl_never_2']):not([class*='__cl_never_3']):not([class*='__cl_never_4']):not([class*='__cl_never_5']):not([class*='__cl_never_6']) {
-  background: var(--cl-ctl-bg-active) !important;
-  border-color: var(--cl-ctl-border-active) !important;
-  border-top-color: var(--cl-ctl-top-active) !important;
-  color: var(--cl-ctl-text-active) !important;
-}
-html[data-dsh-closure-skin][data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] button:not([class*='cardMain' i]):not([role='switch']):not([class*='clsk-switch']):not([class*='arrow' i]):not([class*='icon' i]):not(:has(> svg:only-child)):hover:not([class*='__cl_never_1']):not([class*='__cl_never_2']):not([class*='__cl_never_3']):not([class*='__cl_never_4']):not([class*='__cl_never_5']):not([class*='__cl_never_6']) {
-  background: var(--cl-ctl-bg-active) !important;
-  border-color: var(--cl-ctl-border-active) !important;
-  border-top-color: var(--cl-ctl-top-active) !important;
-  color: var(--cl-ctl-text-active) !important;
-}
-html[data-dsh-closure-skin][data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] [class*='options'] button[class*='themeCube' i][aria-pressed='true']:not([class*='__cl_never_1']):not([class*='__cl_never_2']):not([class*='__cl_never_3']):not([class*='__cl_never_4']):not([class*='__cl_never_5']):not([class*='__cl_never_6']):not([class*='__cl_never_7']):not([class*='__cl_never_8']):not([class*='__cl_never_9']):not([class*='__cl_never_10']) {
-  background: var(--cl-ctl-bg-active) !important;
-  border-color: var(--cl-ctl-border-active) !important;
-  border-top-color: var(--cl-ctl-top-active) !important;
-  color: var(--cl-ctl-text-active) !important;
-}
-html[data-dsh-closure-skin][data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] [class*='options'] button[aria-haspopup]:hover:not([class*='__cl_never_1']):not([class*='__cl_never_2']):not([class*='__cl_never_3']):not([class*='__cl_never_4']):not([class*='__cl_never_5']):not([class*='__cl_never_6']) {
-  background: var(--cl-ctl-bg-active) !important;
-  border-color: var(--cl-ctl-border-active) !important;
-  border-top-color: var(--cl-ctl-top-active) !important;
-  color: var(--cl-ctl-text-active) !important;
-}
+
 html[data-dsh-closure-skin][data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] [class*='options'] button:not([class*='cardMain' i]):not([role='switch']):not([class*='clsk-switch']):not([class*='arrow' i]):not([class*='icon' i]):not(:has(> svg:only-child)):hover:not([class*='__cl_never_1']):not([class*='__cl_never_2']):not([class*='__cl_never_3']):not([class*='__cl_never_4']):not([class*='__cl_never_5']):not([class*='__cl_never_6']) {
   background: var(--cl-ctl-bg-hover) !important;
   border-color: var(--cl-ctl-border-hover) !important;
@@ -2375,30 +2308,7 @@ html[data-dsh-closure-skin][data-dsh-closure-skin] body:not([data-ds-dark-theme]
   color: var(--cl-ctl-text-active) !important;
   box-shadow: var(--cl-ctl-shadow-active) !important;
 }
-html[data-dsh-closure-skin][data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [role='switch'][aria-checked='true'] {
-  background: var(--cl-ctl-bg-active) !important;
-  border-color: var(--cl-ctl-border-active) !important;
-  border-top-color: var(--cl-ctl-top-active) !important;
-  box-shadow: var(--cl-ctl-shadow-active) !important;
-}
-html[data-dsh-closure-skin][data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] [class*='options'] [role='switch'][aria-checked='true'] {
-  background: var(--cl-ctl-bg-active) !important;
-  border-color: var(--cl-ctl-border-active) !important;
-  border-top-color: var(--cl-ctl-top-active) !important;
-  box-shadow: var(--cl-ctl-shadow-active) !important;
-}
-html[data-dsh-closure-skin][data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] button.clsk-switch:not([class*='__cl_never_extra'])[aria-pressed='true'] {
-  background: var(--cl-ctl-bg-active) !important;
-  border-color: var(--cl-ctl-border-active) !important;
-  border-top-color: var(--cl-ctl-top-active) !important;
-  box-shadow: var(--cl-ctl-shadow-active) !important;
-}
-html[data-dsh-closure-skin][data-dsh-closure-skin] body:not([data-ds-dark-theme]) [data-shortcut-modal='settings'] [class*='options'] button.clsk-switch:not([class*='__cl_never_extra'])[aria-pressed='true'] {
-  background: var(--cl-ctl-bg-active) !important;
-  border-color: var(--cl-ctl-border-active) !important;
-  border-top-color: var(--cl-ctl-top-active) !important;
-  box-shadow: var(--cl-ctl-shadow-active) !important;
-}
+
 html[data-dsh-closure-skin][data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] [role='switch'][aria-checked='true'] {
   background: var(--cl-ctl-bg-on) !important;
   border-color: var(--cl-ctl-border-on) !important;
@@ -2433,9 +2343,7 @@ html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] 
   align-self: flex-start !important;
   margin-top: 2px !important;
 }
-html[data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] .clsk-row {
-  align-items: flex-start !important;
-}
+
 html[data-dsh-closure-skin][data-dsh-closure-skin] [data-shortcut-modal='settings'] [class*='options'] button.clsk-switch.is-on:not([class*='__cl_never_extra']) {
   background: var(--cl-ctl-bg-on) !important;
   border-color: var(--cl-ctl-border-on) !important;
@@ -2805,25 +2713,40 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
         if (element.getAttribute('data-cl-perm') !== id) element.setAttribute('data-cl-perm', id)
       }
 
-      function sweep() {
-        for (const element of document.querySelectorAll(CONTAINERS)) refresh(element)
+      function sweep(scope) {
+        const list = scope !== undefined ? scope : document
+        if (list.matches && list.matches(CONTAINERS)) refresh(list)
+        for (const element of list.querySelectorAll(CONTAINERS)) refresh(element)
       }
 
+      // 只扫本次 DOM 变动涉及的子树；流式输出时不再每帧全文档 querySelectorAll
+      const pending = new Set()
       let frame = 0
-      function schedule() {
-        if (frame !== 0) return
-        frame = window.requestAnimationFrame(() => {
-          frame = 0
-          sweep()
-        })
+      function flush() {
+        frame = 0
+        const nodes = Array.from(pending)
+        pending.clear()
+        for (const node of nodes) sweep(node)
       }
-
-      const observer = new window.MutationObserver(schedule)
+      const observer = new window.MutationObserver((records) => {
+        for (const record of records) {
+          if (record.type === 'childList') {
+            for (const node of record.addedNodes) if (node.nodeType === 1) pending.add(node)
+          } else if (record.target && record.target.nodeType === 1) {
+            pending.add(record.target)
+          }
+        }
+        if (pending.size !== 0 && frame === 0) frame = window.requestAnimationFrame(flush)
+      })
+      if (!document.body) return () => {}
       observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-label', 'title'] })
       sweep()
+      // 兜底：菜单复用旧节点、只换内部结构时低频补扫（3s，成本可忽略）
+      const safety = window.setInterval(() => sweep(), 3000)
       return () => {
         observer.disconnect()
         if (frame !== 0) window.cancelAnimationFrame(frame)
+        window.clearInterval(safety)
       }
     }
 
@@ -2843,7 +2766,14 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
         // 原生窗口按钮的 preload 探针在 head 变更 / head load 时重采样；
         // 样式挂上后主动触发一次，让 caption 立即跟上皮肤配色。
         try {
-          document.head.dispatchEvent(new Event('load'))
+          const resampleCaption = () => {
+            try { document.head.dispatchEvent(new Event('load')) } catch (err) {}
+          }
+          if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(resampleCaption, { timeout: 1500 })
+          } else {
+            window.setTimeout(resampleCaption, 0)
+          }
         } catch (err) {}
 
         // 背景场景层：body 级 fixed，z 0；#root 在 z 1（CSS 里）
@@ -2878,8 +2808,10 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
 
         let disposed = false
         let timer = 0
+        let pollDelay = 5000
 
         // 情绪通道：只轮询桌宠状态；主题不再猜，直接用 body[data-ds-dark-theme]
+        // 桌宠没装/路由没起时失败退避到 30s，别每 3s 打一次 404。
         async function poll() {
           try {
             const res = await fetch('/dsh-closure/state', { cache: 'no-store' })
@@ -2892,14 +2824,16 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
             if (root.getAttribute('data-dsh-closure-mood') !== mood) {
               root.setAttribute('data-dsh-closure-mood', mood)
             }
+            pollDelay = 5000
           } catch (err) {
+            pollDelay = Math.min(pollDelay * 2, 30000)
             if (!disposed && root.getAttribute('data-dsh-closure-mood') !== 'normal') {
               root.setAttribute('data-dsh-closure-mood', 'normal')
             }
           }
+          if (!disposed) timer = window.setTimeout(poll, pollDelay)
         }
         poll()
-        timer = window.setInterval(poll, 3000)
 
         // 深度求索中的随机台词：按已用时分三档，每 6 秒换一句
         const RUNNING_LINES = {
@@ -2949,14 +2883,27 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
           const index = text.indexOf('深度求索中')
           const suffix = index >= 0 ? text.slice(index + '深度求索中'.length) : (state.suffix || '')
           state.suffix = suffix
-          el.style.setProperty('--cl-running-label', JSON.stringify(state.line))
-          el.style.setProperty('--cl-running-suffix', JSON.stringify(suffix))
+          if (state.renderedLabel !== state.line) {
+            state.renderedLabel = state.line
+            el.style.setProperty('--cl-running-label', JSON.stringify(state.line))
+          }
+          if (state.renderedSuffix !== suffix) {
+            state.renderedSuffix = suffix
+            el.style.setProperty('--cl-running-suffix', JSON.stringify(suffix))
+          }
         }
+
+        // 只缓存当前运行中的元素：没有就每秒重查，有就复用；10s 或元素断开时重查一次
+        let runningCache = []
+        let runningCacheAt = 0
 
         function updateRunningStatuses() {
           const now = Date.now()
-          const elements = document.querySelectorAll('[class*="runningText"]')
-          for (const el of elements) {
+          if (runningCache.length === 0 || now - runningCacheAt > 10000 || runningCache.some((el) => !el.isConnected)) {
+            runningCache = Array.from(document.querySelectorAll('[class*="runningText"]'))
+            runningCacheAt = now
+          }
+          for (const el of runningCache) {
             const text = el.textContent || ''
             let state = runningState.get(el)
             if (!state) {
@@ -3028,7 +2975,7 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
               state.el.removeAttribute('data-cl-hero-typing')
               if (heroTypeState === state) heroTypeState = null
             }
-          }, 50)
+          }, 80)
         }
 
         function pickHeroLine() {
@@ -3061,12 +3008,12 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
         }
 
         replaceHeroTitle()
-        const heroTimer = window.setInterval(replaceHeroTitle, 1000)
+        const heroTimer = window.setInterval(replaceHeroTitle, 2000)
 
         ctx.effect(() => () => {
           disposed = true
           stopHeroTyping()
-          if (timer) window.clearInterval(timer)
+          if (timer) window.clearTimeout(timer)
           if (runningTimer) window.clearInterval(runningTimer)
           if (heroTimer) window.clearInterval(heroTimer)
           try { style.remove() } catch (err) {}

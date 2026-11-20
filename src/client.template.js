@@ -174,6 +174,8 @@ html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) {
   /* 浅色图标用淡紫，避免深紫发黑 */
   --cl-icon: #a678f0;
   --cl-icon-glow: rgba(166, 120, 240, 0.42);
+  /* 浅色底上成功色（已登录文字/绿点）要压深，否则 #35e0d0 太亮 */
+  --cl-cyan: #0f7d72;
   /* 浅色底上黄色要压深一点才显眼 */
   --cl-spin: #c98a00;
   --cl-spin-glow: rgba(150, 90, 0, 0.5);
@@ -224,6 +226,29 @@ html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) {
 /* 对话框/设置页的底不能被 base: transparent 穿透 */
 html[data-dsh-closure-skin] :is(dialog, [role='dialog'], [role='alertdialog']) {
   --dsw-alias-bg-base: var(--cl-surface-strong);
+}
+
+/* 宿主部分抽屉/浮层在深色主题下仍是浅底，文字却继承成浅色 → 对比不足。
+   统一复用语言下拉那套深色浮层：
+   1) 原生 <select> 用 color-scheme: dark 让系统弹出列表也变深，option 颜色对齐；
+   2) listbox / menu / tooltip 这类自定义浮层直接用皮肤的浮层底与主文字色。 */
+html[data-dsh-closure-skin] body[data-ds-dark-theme] select {
+  color-scheme: dark;
+}
+html[data-dsh-closure-skin] body[data-ds-dark-theme] option,
+html[data-dsh-closure-skin] body[data-ds-dark-theme] optgroup {
+  background-color: var(--dsw-alias-bg-overlay) !important;
+  color: var(--dsw-alias-label-primary) !important;
+}
+html[data-dsh-closure-skin] body[data-ds-dark-theme] :is([role='listbox'], [role='menu'], [role='tooltip']) {
+  background-color: var(--dsw-alias-bg-overlay) !important;
+  color: var(--dsw-alias-label-primary) !important;
+}
+html[data-dsh-closure-skin] body[data-ds-dark-theme] :is([role='option'], [role='menuitem']) {
+  color: var(--dsw-alias-label-primary) !important;
+}
+html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) select {
+  color-scheme: light;
 }
 
 html[data-dsh-closure-skin] body {

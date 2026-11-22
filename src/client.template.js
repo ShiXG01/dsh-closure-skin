@@ -38,6 +38,15 @@ window.__ModuleLoader__.load({
     const ICON_REFRESH_REPLAY = '__ICON_REFRESH_REPLAY__'
     const ICON_GUIDE_HERO = '__ICON_GUIDE_HERO__'
 
+    // 右栏开始页与左栏共用色标，左栏只画渐变并单独设置每个色标的不透明度。
+    const DARK_CONTENT_STOPS = [[0, '27 11 44'], [32, '42 16 56'], [68, '21 24 63'], [100, '8 10 24']]
+    const LIGHT_CONTENT_STOPS = [[0, '255 230 243'], [45, '234 220 255'], [100, '217 230 255']]
+
+    function retroContentGradient(stops, alpha = '1') {
+      const colors = stops.map(([position, rgb]) => `rgb(${rgb} / ${alpha}) ${position}%`)
+      return `linear-gradient(180deg, ${colors.join(', ')})`
+    }
+
     const CSS = `
 /* Fusion Pixel 12px（缝合像素字体）由宿主侧 /dsh-closure-skin/fonts 路由提供。
    比例版给 UI，等宽版给代码/终端；字体缺失时回退到原等宽栈。 */
@@ -104,7 +113,7 @@ html[data-dsh-closure-skin] {
     linear-gradient(180deg, #1c0d2e 0%, #241137 45%, #10102a 100%);
   --cl-retro-content-surface:
     repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px),
-    linear-gradient(180deg, #1b0b2c 0%, #2a1038 32%, #15183f 68%, #080a18 100%);
+    ${retroContentGradient(DARK_CONTENT_STOPS)};
   --cl-retro-card-border: rgba(190, 80, 140, 0.32);
   --cl-retro-card-top: #9c3b74;
   --cl-retro-card-surface:
@@ -202,7 +211,7 @@ html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) {
     linear-gradient(180deg, #f5e9fb, #eadcf7);
   --cl-retro-content-surface:
     repeating-linear-gradient(180deg, rgba(120, 20, 90, 0.035) 0 1px, transparent 1px 3px),
-    linear-gradient(180deg, #ffe6f3 0%, #eadcff 45%, #d9e6ff 100%);
+    ${retroContentGradient(LIGHT_CONTENT_STOPS)};
   --cl-retro-card-border: rgba(176, 24, 106, 0.28);
   --cl-retro-card-top: #d62c84;
   --cl-retro-card-surface:
@@ -347,15 +356,19 @@ html[data-windows-titlebar][data-dsh-closure-skin] [class*='centerCol'] {
   background: transparent;
 }
 
-/* 左栏只画一层底板；不改宿主全局令牌，避免连带拖拽预览、标题栏和右栏。 */
-html[data-dsh-closure-skin][data-cl-sidebar-custom] [class*='_frame'] > [class*='_sidebarCol'] {
-  --cl-sidebar-fill: rgb(var(--cl-sidebar-rgb) / var(--cl-sidebar-opacity, var(--cl-sidebar-default-opacity)));
+/* 左栏只画同款渐变，不叠开始页的扫描线，也不覆盖宿主全局底色令牌。 */
+html[data-dsh-closure-skin] [class*='_frame'] > [class*='_sidebarCol'] {
+  --cl-sidebar-alpha: var(--cl-sidebar-opacity, var(--cl-sidebar-default-opacity));
+  --cl-sidebar-fill: ${retroContentGradient(DARK_CONTENT_STOPS, 'var(--cl-sidebar-alpha)')};
   background: var(--cl-sidebar-fill) !important;
 }
+html[data-dsh-closure-skin] body:not([data-ds-dark-theme]) [class*='_frame'] > [class*='_sidebarCol'] {
+  --cl-sidebar-fill: ${retroContentGradient(LIGHT_CONTENT_STOPS, 'var(--cl-sidebar-alpha)')};
+}
 /* renderSlot 的 display:contents 锚点不画底色；真正的 SidebarRoot 在锚点内。 */
-html[data-dsh-closure-skin][data-cl-sidebar-custom] [class*='_frame'] > [class*='_sidebarCol'] > :is([class*='_root'], [data-slot='sidebar']),
-html[data-dsh-closure-skin][data-cl-sidebar-custom] [class*='_frame'] > [class*='_sidebarCol'] > [data-slot='sidebar'] > [class*='_root'],
-html[data-dsh-closure-skin][data-cl-sidebar-custom] [class*='_frame'] > [class*='_sidebarCol'] :is([class*='_scrollFade'], [class$='_fade'], [class*='_fade ']) {
+html[data-dsh-closure-skin] [class*='_frame'] > [class*='_sidebarCol'] > :is([class*='_root'], [data-slot='sidebar']),
+html[data-dsh-closure-skin] [class*='_frame'] > [class*='_sidebarCol'] > [data-slot='sidebar'] > [class*='_root'],
+html[data-dsh-closure-skin] [class*='_frame'] > [class*='_sidebarCol'] :is([class*='_scrollFade'], [class$='_fade'], [class*='_fade ']) {
   background: transparent !important;
 }
 /* 抽屉保留宿主已有的定位与 z-index。普通栏将毛玻璃放在内容下方，
@@ -2735,7 +2748,6 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
       root.style.setProperty('--cl-wallpaper-fit', settings.wallpaperFit)
       root.style.setProperty('--cl-wallpaper-opacity', String(settings.wallpaperOpacity / 100))
       root.style.setProperty('--cl-wallpaper-filter', settings.wallpaperBlur ? 'blur(' + settings.wallpaperBlur + 'px)' : 'none')
-      root.toggleAttribute('data-cl-sidebar-custom', settings.sidebarOpacity !== null || settings.sidebarBlur > 0)
       root.toggleAttribute('data-cl-sidebar-frost', settings.sidebarBlur > 0)
       if (settings.sidebarOpacity === null) root.style.removeProperty('--cl-sidebar-opacity')
       else root.style.setProperty('--cl-sidebar-opacity', String(settings.sidebarOpacity / 100))
@@ -3486,7 +3498,6 @@ html[data-dsh-closure-skin] :is(textarea, input, [contenteditable]:not([contente
           root.style.removeProperty('--cl-wallpaper-fit')
           root.style.removeProperty('--cl-wallpaper-opacity')
           root.style.removeProperty('--cl-wallpaper-filter')
-          root.removeAttribute('data-cl-sidebar-custom')
           root.removeAttribute('data-cl-sidebar-frost')
           root.style.removeProperty('--cl-sidebar-opacity')
           root.style.removeProperty('--cl-sidebar-filter')

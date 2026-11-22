@@ -1,18 +1,15 @@
 // 把 client 模板里的小素材占位符替换成 data URI，生成 lib/client.js。
-// 素材来源：assets-src/raw/ac_s_closur（游戏内 UI 组件库），过大的图在 src/ 里预先裁切缩放。
+// 构建所需素材都已裁切缩放并收入仓库的 src/。
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-// 本文件位于 <repo>/plugin/dsh-closure-skin/tools/，向上三级即工作区根目录；
-// 不再写死盘符，换机器/换目录都能构建。
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
-const TEMPLATE = path.join(ROOT, 'plugin/dsh-closure-skin/src/client.template.js')
-const SRC = path.join(ROOT, 'plugin/dsh-closure-skin/src')
-const OUT = path.join(ROOT, 'plugin/dsh-closure-skin/lib/client.js')
-const RAW = path.join(ROOT, 'assets-src/raw/ac_s_closur')
+const ROOT = fileURLToPath(new URL('../', import.meta.url))
+const SRC = path.join(ROOT, 'src')
+const TEMPLATE = path.join(SRC, 'client.template.js')
+const OUT = path.join(ROOT, 'lib/client.js')
 
-// 占位符 → 素材文件名；先在 src/ 找（预处理过的小图），再回退到 raw 素材库
+// 占位符 → src/ 下预处理过的素材文件名
 const ASSETS = {
   __ASSET_LOGO__: 'logo-88.png',
   __ICON_PLUGIN__: 'plugin-cat.png',
@@ -69,7 +66,7 @@ let src = fs.readFileSync(TEMPLATE, 'utf8')
 
 const report = []
 for (const [token, file] of Object.entries(ASSETS)) {
-  const full = findIn(SRC, file) || findIn(RAW, file)
+  const full = findIn(SRC, file)
   if (!full) throw new Error('asset not found: ' + file)
   const b64 = fs.readFileSync(full).toString('base64')
   const uri = `data:image/png;base64,${b64}`
